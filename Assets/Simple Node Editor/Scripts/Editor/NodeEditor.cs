@@ -21,6 +21,7 @@ namespace SimpleNodeEditor
         private void OnGUI()
         {
             DrawNodes();
+            ProcessNodeEvents(Event.current);
             ProcessEvent(Event.current);
 
             if (GUI.changed)
@@ -49,14 +50,28 @@ namespace SimpleNodeEditor
 
         public void DrawNodes()
         {
-            if (_nodes != null && _nodes.Count > 0)
-            {
-                foreach (Node node in _nodes)
-                {
-                    if (node == null) continue;
+            if (_nodes.Count == 0) return;
 
-                    node.Draw();
-                }
+            foreach (Node node in _nodes)
+            {
+                if (node == null) continue;
+
+                node.Draw();
+            }
+        }
+
+        public void ProcessNodeEvents(Event evnt)
+        {
+            if (_nodes.Count == 0) return;
+
+            foreach (Node node in _nodes)
+            {
+                if (node == null) continue;
+
+                if (node.ProcessEvent(evnt))
+                {
+                    GUI.changed = true;
+                } 
             }
         }
 
@@ -69,42 +84,6 @@ namespace SimpleNodeEditor
                     {
                         CreateContextMenu(evnt.mousePosition);
                     }
-                    break;
-                case EventType.MouseUp:
-                    break;
-                case EventType.MouseMove:
-                    break;
-                case EventType.MouseDrag:
-                    break;
-                case EventType.KeyDown:
-                    break;
-                case EventType.KeyUp:
-                    break;
-                case EventType.ScrollWheel:
-                    break;
-                case EventType.Repaint:
-                    break;
-                case EventType.Layout:
-                    break;
-                case EventType.DragUpdated:
-                    break;
-                case EventType.DragPerform:
-                    break;
-                case EventType.DragExited:
-                    break;
-                case EventType.Ignore:
-                    break;
-                case EventType.Used:
-                    break;
-                case EventType.ValidateCommand:
-                    break;
-                case EventType.ExecuteCommand:
-                    break;
-                case EventType.ContextClick:
-                    break;
-                case EventType.MouseEnterWindow:
-                    break;
-                case EventType.MouseLeaveWindow:
                     break;
                 default:
                     break;

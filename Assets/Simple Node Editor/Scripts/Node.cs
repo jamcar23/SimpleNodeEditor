@@ -8,6 +8,8 @@ namespace SimpleNodeEditor
         public string Title;
         public GUIStyle Style;
 
+        private bool _isDragging;
+
         public Node(Vector2 position, float width, float height, GUIStyle nodeStyle)
         {
             Rect = new Rect(position.x, position.y, width, height);
@@ -36,8 +38,32 @@ namespace SimpleNodeEditor
         /// </summary>
         /// <param name="evnt"></param>
         /// <returns>Returns true when GUI needs to be updated.</returns>
-        public bool ProcessEvents(Event evnt)
+        public bool ProcessEvent(Event evnt)
         {
+            switch (evnt.type)
+            {
+                case EventType.MouseDown:
+                    if (evnt.button == 0)
+                    {
+                        if (Rect.Contains(evnt.mousePosition))
+                        {
+                            _isDragging = true;
+                            GUI.changed = true;
+                        }
+                    }
+                    break;
+                case EventType.MouseUp:
+                    _isDragging = false;
+                    break;
+                case EventType.MouseDrag:
+                    if (evnt.button == 0 && _isDragging)
+                    {
+                        Drag(evnt.delta);
+                        evnt.Use();
+                        return true;
+                    }
+                    break;
+            }
             return false;
         }
     }
