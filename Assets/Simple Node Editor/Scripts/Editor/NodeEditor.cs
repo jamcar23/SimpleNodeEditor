@@ -7,7 +7,11 @@ namespace SimpleNodeEditor
     public class NodeEditor : EditorWindow, INodeGraph
     {
         private readonly List<Node> _nodes = new List<Node>();
+        private readonly Vector2 _defaultNodeSize = new Vector2(200, 50);
         private GUIStyle _nodeStyle;
+
+        public Vector2 DefaultNodeSize => _defaultNodeSize;
+        public GUIStyle NodeStyle => _nodeStyle;
 
         #region Unity Methods
 
@@ -43,7 +47,7 @@ namespace SimpleNodeEditor
 
         protected void OnClickAddNode(Vector2 mousePosition)
         {
-            _nodes.Add(new Node(mousePosition, 200, 50, _nodeStyle));
+            _nodes.Add(new Node(mousePosition, this));
         }
 
         #endregion

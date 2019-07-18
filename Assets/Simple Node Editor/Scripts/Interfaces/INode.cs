@@ -1,7 +1,9 @@
-﻿namespace SimpleNodeEditor
-{
-    public interface INode
-    {
+﻿using UnityEngine;
 
+namespace SimpleNodeEditor
+{
+    public interface INode: IDrawer
+    {
+        Rect Rect { get; }
     }
 }

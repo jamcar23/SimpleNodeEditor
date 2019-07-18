@@ -2,18 +2,19 @@
 
 namespace SimpleNodeEditor
 {
-    public class Node
+    public class Node: INode
     {
-        public Rect Rect;
-        public string Title;
-        public GUIStyle Style;
-
+        private Rect _rect;
+        private string _title;
+        private GUIStyle _style;
         private bool _isDragging;
 
-        public Node(Vector2 position, float width, float height, GUIStyle nodeStyle)
+        public Rect Rect => _rect;
+
+        public Node(Vector2 position, INodeGraph graph)
         {
-            Rect = new Rect(position.x, position.y, width, height);
-            Style = nodeStyle;
+            _rect = new Rect(position.x, position.y, graph.DefaultNodeSize.x, graph.DefaultNodeSize.y);
+            _style = graph.NodeStyle;
         }
 
         /// <summary>
@@ -22,7 +23,7 @@ namespace SimpleNodeEditor
         /// <param name="delta"></param>
         public void Drag(Vector2 delta)
         {
-            Rect.position += delta;
+            _rect.position += delta;
         }
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace SimpleNodeEditor
         /// </summary>
         public void Draw()
         {
-            GUI.Box(Rect, Title, Style);
+            GUI.Box(_rect, _title, _style);
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace SimpleNodeEditor
                 case EventType.MouseDown:
                     if (evnt.button == 0)
                     {
-                        if (Rect.Contains(evnt.mousePosition))
+                        if (_rect.Contains(evnt.mousePosition))
                         {
                             _isDragging = true;
                             GUI.changed = true;
